@@ -7,12 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model users {
-  id         Int      @id @default(autoincrement())
-  name       String   @db.VarChar(255)
-  password   String   @db.VarChar(255)
-  cpf        String   @unique @db.VarChar(11)
-  email      String   @unique @db.VarChar(255)
-  created_at DateTime @db.Timestamp(6)
-  updated_at DateTime @db.Timestamp(6)
+model Session {
+  id        Int      @id(map: "sessions_pkey") @default(autoincrement())
+  token     String   @db.VarChar(255)
+  userid    Int
+  createdat DateTime @default(now()) @db.Timestamptz(6)
+  updatedat DateTime @db.Timestamptz(6)
+  User      User     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Sessions_userid_fkey")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique @db.VarChar(255)
+  password  String    @db.VarChar(255)
+  createdAt DateTime  @default(now()) @db.Timestamp(6)
+  updateAt  DateTime  @db.Timestamp(6)
+  Session   Session[]
 }
