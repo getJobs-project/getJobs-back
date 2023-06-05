@@ -1,10 +1,11 @@
-import { User } from '@prisma/client';
+import dayjs from 'dayjs';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { invalidCredentialsError } from './errors';
+import { User } from '@prisma/client';
 import { exclude } from '@/utils/prisma.utils';
 import userRepository from '@/repositories/user.repositories';
 import sessionRepository from '@/repositories/session.repositories';
+import { invalidCredentialsError } from './errors';
 
 async function signIn(params: SignInParams): Promise<SignInResult> {
   const { email, password } = params;
@@ -30,10 +31,11 @@ async function getUserOrFail(email: string): Promise<GetUserOrFailResult> {
 
 async function createSession(userId: number) {
   const token = jwt.sign({ userId }, process.env.JWT_SECRET);
-  // await sessionRepository.create({
-  //   token,
-  //   userId,
-  // });
+  await sessionRepository.create({
+    token,
+    userId,
+    updatedAt: dayjs().format(),
+  });
 
   return token;
 }

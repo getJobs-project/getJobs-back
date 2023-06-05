@@ -10,10 +10,10 @@ datasource db {
 model Session {
   id        Int      @id(map: "sessions_pkey") @default(autoincrement())
   token     String   @db.VarChar(255)
-  userid    Int
-  createdat DateTime @default(now()) @db.Timestamptz(6)
-  updatedat DateTime @db.Timestamptz(6)
-  User      User     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Sessions_userid_fkey")
+  userId    Int
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @db.Timestamptz(6)
+  User      User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Sessions_userid_fkey")
 }
 
 model User {

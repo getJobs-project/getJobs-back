@@ -1,12 +1,20 @@
-import express, { Express } from "express";
-import cors from "cors";
+import express, { Express } from 'express';
+import cors from 'cors';
 
 import { loadEnv, connectDb, disconnectDB } from '@/config';
+import { authRouter, userRouter } from '@/routes';
+import { handleApplicationErrors } from './middlewares/error-handler.middleware';
 
 loadEnv();
 
 const app = express();
-app.use(cors()).use(express.json());
+app
+  .use(cors())
+  .use(express.json())
+  .get('/test', (_req, res) => res.send('OK!'))
+  .use('/user', userRouter)
+  .use('/auth', authRouter)
+  .use(handleApplicationErrors);
 
 export function init(): Promise<Express> {
   connectDb();
