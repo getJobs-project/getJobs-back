@@ -12,7 +12,7 @@ app
   .use(cors())
   .use(express.json())
   .get('/test', (_req, res) => res.send('OK!'))
-  .use('/user', userRouter)
+  .use('/users', userRouter)
   .use('/auth', authRouter)
   .use(handleApplicationErrors);
 

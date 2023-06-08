@@ -21,6 +21,9 @@ model User {
   email     String    @unique @db.VarChar(255)
   password  String    @db.VarChar(255)
   createdAt DateTime  @default(now()) @db.Timestamp(6)
-  updateAt  DateTime  @db.Timestamp(6)
+  updatedAt DateTime  @db.Timestamp(6)
+  name      String    @db.VarChar(255)
+  birthday  DateTime  @db.Date
+  cpf       String    @db.VarChar(11)
   Session   Session[]
 }

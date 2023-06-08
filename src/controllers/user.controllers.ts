@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
-import { SignInParams } from '@/services/auth.services';
-import userService from '@/services/user.services';
+import userService, { CreateUserParams } from '@/services/user.services';
 
 export async function createUser(req: Request, res: Response, next: NextFunction) {
-  const { email, password } = req.body as SignInParams;
+  const { name, birthday, cpf, email, password } = req.body as CreateUserParams;
 
   try {
-    await userService.createUser({ email, password });
+    await userService.createUser({ email, password, name, birthday, cpf });
 
     return res.sendStatus(httpStatus.CREATED);
   } catch (error) {
