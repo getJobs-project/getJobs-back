@@ -23,6 +23,14 @@ async function findByCPF(cpf: string) {
   });
 }
 
+async function findByUsername(userName: string) {
+  return prisma.user.findFirst({
+    where: {
+      userName,
+    },
+  });
+}
+
 async function create(data: Prisma.UserUncheckedCreateInput) {
   return prisma.user.create({
     data,
@@ -32,6 +40,7 @@ async function create(data: Prisma.UserUncheckedCreateInput) {
 const userRepository = {
   findByEmail,
   findByCPF,
+  findByUsername,
   create,
 };
 

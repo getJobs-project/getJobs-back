@@ -9,6 +9,11 @@ async function findLastPosts(): Promise<Prisma.PostsMaxAggregateOutputType[]> {
   return postsRepository.findLastPosts();
 }
 
+async function findMorePosts(createdAt: Date): Promise<Prisma.PostsMaxAggregateOutputType[]> {
+  console.log(createdAt);
+  return postsRepository.findMorePosts(createdAt);
+}
+
 async function createPost({
   text,
   imageUrl,
@@ -29,6 +34,7 @@ type CreatePostParamsService = Pick<CreatePostParams, 'text' | 'imageUrl' | 'loc
 
 const postsService = {
   findLastPosts,
+  findMorePosts,
   createPost,
 };
 

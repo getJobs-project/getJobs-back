@@ -11,7 +11,25 @@ async function findLastPosts() {
       User: {
         select: {
           profilePicture: true,
-          name: true,
+          userName: true,
+        },
+      },
+    },
+  });
+}
+
+async function findMorePosts(createAt: Date) {
+  return prisma.posts.findMany({
+    where: {
+      createdAt: { lt: createAt },
+    },
+    orderBy: [{ updatedAt: 'desc' }],
+    take: 10,
+    include: {
+      User: {
+        select: {
+          profilePicture: true,
+          userName: true,
         },
       },
     },
@@ -34,6 +52,7 @@ async function create(data: CreatePostParams) {
 
 const postsRepository = {
   findLastPosts,
+  findMorePosts,
   findByUserId,
   create,
 };

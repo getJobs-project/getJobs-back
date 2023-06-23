@@ -11,9 +11,11 @@ export async function createUser({
   email,
   password,
   profilePicture,
+  userName,
 }: CreateUserParams): Promise<User> {
   await validateUniqueEmailOrFail(email);
   await validateUniqueCPFOrFail(cpf);
+  await validateUniqueUsernameOrFail(userName);
 
   const hashedPassword = await bcrypt.hash(password, 12);
   return userRepository.create({
@@ -22,6 +24,7 @@ export async function createUser({
     cpf,
     email,
     profilePicture,
+    userName,
     password: hashedPassword,
     updatedAt: dayjs().format(),
   });
@@ -39,7 +42,16 @@ async function validateUniqueCPFOrFail(cpf: string) {
   if (userWithSameEmail) throw conflictError('There is already an user with given CPF');
 }
 
-export type CreateUserParams = Pick<User, 'email' | 'password' | 'birthday' | 'cpf' | 'name' | 'profilePicture'>;
+async function validateUniqueUsernameOrFail(username: string) {
+  const userWithSameEmail = await userRepository.findByUsername(username);
+
+  if (userWithSameEmail) throw conflictError('There is already an user with given username');
+}
+
+export type CreateUserParams = Pick<
+  User,
+  'email' | 'password' | 'birthday' | 'cpf' | 'name' | 'profilePicture' | 'userName'
+>;
 
 const userService = {
   createUser,

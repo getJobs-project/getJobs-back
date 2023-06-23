@@ -20,14 +20,17 @@ model User {
   id             Int       @id @default(autoincrement())
   email          String    @unique @db.VarChar(255)
   password       String    @db.VarChar(255)
-  createdAt      DateTime  @default(now()) @db.Timestamp(6)
   birthday       DateTime  @db.Date
   cpf            String    @unique @db.VarChar(11)
-  name           String    @unique @db.VarChar(255)
+  userName       String    @unique @db.VarChar(20)
+  name           String    @db.VarChar(255)
+  profilePicture String
+  createdAt      DateTime  @default(now()) @db.Timestamp(6)
   updatedAt      DateTime  @db.Timestamp(6)
-  profilePicture String    @unique
   Session        Session[]
   posts          posts[]
+
+  @@unique([email, userName, cpf])
 }
 
 model posts {
