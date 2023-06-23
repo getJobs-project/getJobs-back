@@ -10,3 +10,11 @@ export type RequestError = {
   name: string;
   message: string;
 };
+
+export type CreatePostParams = {
+  text: string;
+  imageUrl?: string;
+  location?: string;
+  userId: number;
+  updatedAt: Date | string;
+};

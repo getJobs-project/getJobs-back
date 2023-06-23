@@ -1,25 +1,27 @@
 import { User } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import { duplicatedEmailError } from '@/errors';
+import { conflictError, duplicatedEmailError } from '@/errors';
 import userRepository from '@/repositories/user.repositories';
 import dayjs from 'dayjs';
 
-export async function createUser({ name, birthday, cpf, email, password }: CreateUserParams): Promise<User> {
+export async function createUser({
+  name,
+  birthday,
+  cpf,
+  email,
+  password,
+  profilePicture,
+}: CreateUserParams): Promise<User> {
   await validateUniqueEmailOrFail(email);
-  console.log({
-    name,
-    birthday,
-    cpf,
-    email,
-    password: password,
-    updateAt: dayjs().format(),
-  });
+  await validateUniqueCPFOrFail(cpf);
+
   const hashedPassword = await bcrypt.hash(password, 12);
   return userRepository.create({
     name,
     birthday,
     cpf,
     email,
+    profilePicture,
     password: hashedPassword,
     updatedAt: dayjs().format(),
   });
@@ -31,7 +33,13 @@ async function validateUniqueEmailOrFail(email: string) {
   if (userWithSameEmail) throw duplicatedEmailError();
 }
 
-export type CreateUserParams = Pick<User, 'email' | 'password' | 'birthday' | 'cpf' | 'name'>;
+async function validateUniqueCPFOrFail(cpf: string) {
+  const userWithSameEmail = await userRepository.findByCPF(cpf);
+
+  if (userWithSameEmail) throw conflictError('There is already an user with given CPF');
+}
+
+export type CreateUserParams = Pick<User, 'email' | 'password' | 'birthday' | 'cpf' | 'name' | 'profilePicture'>;
 
 const userService = {
   createUser,

@@ -7,4 +7,5 @@ export const createUserSchema = Joi.object<CreateUserParams>({
   name: Joi.string().min(2).required(),
   birthday: Joi.date().required(),
   cpf: Joi.string().min(11).max(11).required(),
+  profilePicture: Joi.string().required(),
 });

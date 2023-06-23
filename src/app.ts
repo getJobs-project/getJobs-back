@@ -2,7 +2,7 @@ import express, { Express } from 'express';
 import cors from 'cors';
 
 import { loadEnv, connectDb, disconnectDB } from '@/config';
-import { authRouter, userRouter } from '@/routes';
+import { authRouter, postsRouter, userRouter } from '@/routes';
 import { handleApplicationErrors } from './middlewares/error-handler.middleware';
 
 loadEnv();
@@ -14,6 +14,7 @@ app
   .get('/test', (_req, res) => res.send('OK!'))
   .use('/users', userRouter)
   .use('/auth', authRouter)
+  .use('/posts', postsRouter)
   .use(handleApplicationErrors);
 
 export function init(): Promise<Express> {
